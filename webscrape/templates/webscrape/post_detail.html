@@ -1,0 +1,10 @@
+{% extends 'webscrape/base.html' %}
+
+{% block content %}
+	<div>
+	{{ post.data|safe }}
+	</div>
+	<div>
+	{{ post.email|safe }}
+	</div>
+{% endblock %}
