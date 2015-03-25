@@ -26,6 +26,7 @@ def post_detail(request, pk):
 def crawler(addr):
         html = urlopen(addr).read()
         links = Set(findall(r'(http://[a-z0-9A-Z].*?)"',html))
+	links = links.union(Set(findall(r'(https://[a-z0-9A-Z].*?)"',html)))
 	emails = Set(findall(r'([a-z\._A-Z0-9]+@[a-z\._A-Z0-9]+)',html))
 	links_list = links
 	links_data = ''
@@ -35,5 +36,6 @@ def crawler(addr):
             	emails = emails.union(Set(findall(r'([a-z\._A-Z0-9]+@[a-z\._A-Z0-9]+)',html_child)))
             	email_data = '  '.join(emails)
             	links_list = links_list.union(Set(findall(r'(http://[a-z0-9A-Z].*?)"',html_child)))
+		links_list = links_list.union(Set(findall(r'(https://[a-z0-9A-Z].*?)"',html_child)))
 		links_data = '  '.join(links_list)
 	return [links_data, email_data]
