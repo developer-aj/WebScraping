@@ -15,8 +15,8 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('website', models.CharField(max_length=100)),
-                ('email', models.TextField()),
-                ('data', models.TextField()),
+                ('emails', models.TextField(default=b'')),
+                ('links', models.TextField(default=b'')),
             ],
             options={
             },
