@@ -2,9 +2,9 @@
 
 {% block content %}
 	<div>
-	{{ post.data|safe }}
+	{{ post.links|linebreaks }}
 	</div>
 	<div>
-	{{ post.email|safe }}
+	{{ post.emails|linebreaks }}
 	</div>
 {% endblock %}

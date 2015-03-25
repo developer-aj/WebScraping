@@ -12,7 +12,7 @@ def post_new(request):
 		if form.is_valid():
 			post = form.save(commit=False)
 			ul = "http://"+post.website
-			post.data, post.email  = crawler(ul).split('starkpatel')
+			post.links, post.email  = crawler(ul)
 			post.save()
 			return render(request, 'webscrape/post_detail.html', {'post': post})
 	else:
@@ -24,24 +24,16 @@ def post_detail(request, pk):
 	return render(request, 'webscrape/post_detail.html', {'post': post})
             	
 def crawler(addr):
-        a = urlopen(addr)
-        html = a.read()
-        links = findall(r'(http:.*?)"',html)
-	html_data = " "
-	email_data = " "
-	linqs = ""        
+        html = urlopen(addr).read()
+        links = Set(findall(r'(http:.*?)"',html))
+	emails = Set(findall(r'([a-z\._A-Z0-9]+@[a-z\._A-Z0-9]+)',html))
+	links_list = links
+	links_data = ''
+	email_data = ''    
 	for link in links:
-            	a_child = urlopen(link)
-		linqs+= "".join(link)
-            	html_child = a_child.read()
-		email = findall(r'([a-z\._A-Z0-9]+@[a-z\._A-Z0-9]+)',html_child)
-            	email_set = Set(email)
-            	email_data = " ".join(email_set)
-            	title = "".join(findall(r'<title.*?>[\n]?(.*?)</title>',html_child))
-		content = "".join(findall(r'<meta name="[Dd][Ee][Ss].*?" content="(.*?)"',html_child))
-            #print "\n"+link
-            	html_data = '<a href="'+link+'"><h2>'+title+'</h2></a>'
-            	html_data = html_data + content
-            	html_data = html_data + '<h4 style="color:blue">'+link+'</h4><br/>'          
-	html_data += 'starkpatel'+email_data+linqs	
-	return html_data
+            	html_child = urlopen(link).read()
+            	emails = emails.union(Set(findall(r'([a-z\._A-Z0-9]+@[a-z\._A-Z0-9]+)',html_child)))
+            	email_data = ' '.join(emails)
+            	links_list = links_list.union(Set(findall(r'(http:.*?)"',html_child)))
+		links_data = ' '.join(links_list)
+	return [links_data, email_data]
