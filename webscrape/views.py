@@ -34,8 +34,8 @@ def crawler(addr):
 	for link in links:
             	html_child = urlopen(link).read()
             	emails = emails.union(Set(findall(r'([a-z\._A-Z0-9]+@[a-z\._A-Z0-9]+)',html_child)))
-            	email_data = '  '.join(emails)
+            	email_data = '\n'.join(emails)
             	links_list = links_list.union(Set(findall(r'(http://[a-z0-9A-Z].*?)"',html_child)))
 		links_list = links_list.union(Set(findall(r'(https://[a-z0-9A-Z].*?)"',html_child)))
-		links_data = '  '.join(links_list)
+		links_data = '\n'.join(links_list)
 	return [links_data, email_data]
